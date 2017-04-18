@@ -7,7 +7,7 @@ $i = 1;
 		{{ $i++ }}
 	</td>
 	<td>
-		<a href="#" class="btn btn-warning btn-sm">
+		<a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm">
 			<i class="fa fa-pencil-square-o"></i>
 		</a>
 		<button class="btn btn-danger btn-sm">

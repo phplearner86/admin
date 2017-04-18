@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
+use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -26,7 +28,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create');
+        $roles = Role::orderBy('name')->get();
+        return view('admin.users.create', compact('roles'));
     }
 
     /**
@@ -37,7 +40,15 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        User::create($request->all());
+        $this->validate($request, [
+            'name' => 'required',
+            'password' => 'required',
+            'password-confirm' => 'required',
+            'role_id' => 'required',
+            ]);
+
+        $user = User::create($request->all());
+        $user->roles()->attach($request->role_id);
         
         flash()->success('New user was created');
         return back();
@@ -62,7 +73,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        $roles = Role::orderBy('name')->get();
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -74,7 +86,11 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $user->update($request->all());
+        $user->roles()->sync($request->role_id);
+        
+        flash()->success('User updated');
+        return redirect(route('users.index'));
     }
 
     /**

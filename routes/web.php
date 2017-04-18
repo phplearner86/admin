@@ -19,3 +19,4 @@ Route::name('admin.dashboard')->get('dashboard', 'HomeController@dashboard');
 
 //User
 Route::resource('users', 'UserController');
+Route::name('email.verification')->get('register/verify-account/{token}', 'Auth\RegisterController@confirmEmail' );

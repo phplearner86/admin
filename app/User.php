@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'slug', 'verified', 'email_token'
     ];
 
     /**
@@ -59,5 +59,18 @@ class User extends Authenticatable
     public function getJoinedAttribute()
     {
         return $this->created_at->format('d M Y');
+    }
+
+    public function verifyAccount()
+    {
+        $this->email_token = null;
+        $this->verified = true;
+
+        $this->save();
+    }
+
+    public function assignRole($role)
+    {
+        $this->roles()->sync($role);
     }
 }

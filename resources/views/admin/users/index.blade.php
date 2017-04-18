@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
-{{-- Title --}}
+@section('title', '| All users')
+
 
 @section('content')
 
